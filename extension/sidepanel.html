@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ug" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fusha-Speak Live Coach - Side Panel</title>
+  <style>
+    :root {
+      --font-uyghur: 'UKIJ Tuz', 'ALKATIP Basma', 'Uyghur Pashto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+      --font-arabic: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
+      
+      --bg-primary: #090d16;
+      --bg-secondary: #111827;
+      --bg-tertiary: #1f2937;
+      --border-color: #374151;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-soft: rgba(37, 99, 235, 0.15);
+      --accent-sky: #38bdf8;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    html.light {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f1f5f9;
+      --border-color: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-soft: rgba(37, 99, 235, 0.12);
+      --accent-sky: #0284c7;
+      --danger: #dc2626;
+      --warning: #d97706;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      width: 100%;
+      height: 100vh;
+      overflow-y: auto;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-uyghur);
+      font-size: 13.5px;
+      line-height: 1.7;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .arabic-text {
+      font-family: var(--font-arabic);
+      font-size: 19px;
+      line-height: 2.2;
+      direction: rtl;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.35);
+    }
+
+    .brand-titles h1 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .brand-titles span {
+      font-size: 10.5px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 5px 9px;
+      cursor: pointer;
+      font-size: 11.5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      color: var(--text-main);
+      border-color: var(--accent);
+    }
+
+    .tab-bar {
+      display: flex;
+      background-color: var(--bg-secondary);
+      padding: 8px 16px;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tab-item {
+      flex: 1;
+      padding: 7px 6px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+
+    .tab-item.active {
+      background: var(--accent-soft);
+      border-color: rgba(37, 99, 235, 0.4);
+      color: var(--accent-sky);
+    }
+
+    main {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    .section-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    textarea {
+      width: 100%;
+      height: 90px;
+      padding: 10px 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 15px;
+      line-height: 1.8;
+      resize: vertical;
+      font-family: var(--font-arabic);
+      direction: rtl;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 7px;
+      padding: 9px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-radius: 7px;
+      padding: 9px 14px;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+    }
+
+    .result-box {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+      min-height: 70px;
+    }
+
+    .result-content {
+      color: var(--text-main);
+      font-size: 18px;
+      line-height: 2.2;
+    }
+
+    .result-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 8px;
+    }
+
+    .mic-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 12px;
+      text-align: center;
+    }
+
+    .mic-button {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      border: 2px solid var(--accent);
+      color: var(--accent-sky);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .mic-button.recording {
+      background: var(--danger);
+      border-color: #fca5a5;
+      color: #ffffff;
+      animation: pulse-ring 1.4s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+      70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    .mic-status {
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .mic-error-guide {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      text-align: right;
+      font-size: 12px;
+      color: #fca5a5;
+      line-height: 1.6;
+    }
+
+    .word-breakdown {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      direction: rtl;
+    }
+
+    .word-chip {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: var(--font-arabic);
+      font-size: 16px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.4;
+      border: 1px solid var(--border-color);
+    }
+
+    .word-chip.correct {
+      background: rgba(37, 99, 235, 0.15);
+      border-color: #3b82f6;
+      color: #60a5fa;
+    }
+
+    .word-chip.near {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: #f59e0b;
+      color: #fbbf24;
+    }
+
+    .word-chip.mismatch {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #f87171;
+    }
+
+    .word-chip-sub {
+      font-family: var(--font-uyghur);
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    .makharij-tip-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      font-size: 12px;
+      color: #f59e0b;
+    }
+
+    footer {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand-group">
+      <div class="brand-icon">ف</div>
+      <div class="brand-titles">
+        <h1>فۇسھا يان مەشقاۋۇلى (Side Panel)</h1>
+        <span>Fusha-Speak Continuous Companion</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="spThemeToggleBtn" class="icon-btn" title="رەڭ كۆرۈنۈشىنى ئالماشتۇرۇش">🌙</button>
+    </div>
+  </header>
+
+  <nav class="tab-bar">
+    <button class="tab-item active" data-tab="sp-tashkeel">ھەرىكەت قويۇش</button>
+    <button class="tab-item" data-tab="sp-speech">نۇتۇق ۋە تەلەپپۇز</button>
+    <button class="tab-item" data-tab="sp-dialogues">ئەمەلىي سىنارىيە (36 جۈملە)</button>
+  </nav>
+
+  <main>
+    <!-- TAB 1: Tashkeel -->
+    <div id="sp-tashkeel" class="tab-pane active">
+      <div class="section-card">
+        <div class="card-title">
+          <span>ئەرەبچە تېكىست:</span>
+          <span style="font-size: 10px; color: var(--accent-sky);">يەرلىك گىرامماتىكا ماتورى</span>
+        </div>
+        <textarea id="spArabicInput" placeholder="ھەرىكەتلەندۈرمەكچى بولغان ئەرەبچە تېكىستنى كىرگۈزۈڭ..."></textarea>
+        
+        <div class="button-row">
+          <button id="spDiacritizeBtn" class="btn-primary">
+            ✨ ئاپتوماتىك ھەرىكەت قويۇش
+          </button>
+          <button id="spClearBtn" class="btn-secondary">
+            تازىلاش
+          </button>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="card-title">
+          <span>ھەرىكەتلەندۈرۈلگەن فۇسھا تېكىستى:</span>
+          <span id="spCopyStatus" style="font-size: 11px; color: var(--accent-sky);"></span>
+        </div>
+        <div class="result-box">
+          <div id="spTashkeelOutput" class="result-content arabic-text">
+            السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ
+          </div>
+          <div class="result-actions">
+            <button id="spSpeakBtn" class="icon-btn">🔊 ئاۋازنى ئاڭلاش</button>
+            <button id="spCopyBtn" class="icon-btn">📋 كۆچۈرۈۋېلىش</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Speech Coach -->
+    <div id="sp-speech" class="tab-pane">
+      <div class="section-card">
+        <div class="card-title">
+          <span>مەشىق قىلىنىدىغان نىشان جۈملە:</span>
+        </div>
+        <div class="result-box">
+          <div id="spTargetText" class="result-content arabic-text" style="color: #38bdf8;">
+            أَبْحَثُ عَنْ مُعْجَمٍ لُغَوِيٍّ مُعْتَمَدٍ، وَكُتُبٍ فِي فَصَاحَةِ اللِّسَانِ.
+          </div>
+          <div class="result-actions">
+            <button id="spListenTargetBtn" class="icon-btn">🔊 ئەسلى نۇتۇقنى ئاڭلاش</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="mic-stage">
+          <button id="spMicBtn" class="mic-button" title="نۇتۇق سۆزلەپ مەشىق قىلىش">🎙️</button>
+          <div id="spMicStatus" class="mic-status">
+            كۇنۇپكىنى بېسىپ نىشان جۈملىنى يۇقىرى ئاۋازدا ئوقۇڭ...
+          </div>
+          <div id="spMicErrorGuide" class="mic-error-guide" style="display: none;">
+            <strong>⚠️ مىكروفون رۇخسىتى بېرىلمىگەن (not-allowed):</strong><br>
+            تور كۆرگۈچنىڭ ئادرېس بالدىقىدىكى قۇلۇپ سىنبەلگىسىنى ياكى بەت تەڭشىكىنى بېسىپ «مىكروفون» (Microphone) رۇخسىتىنى قوزغىتىپ قويۇڭ.
+          </div>
+        </div>
+
+        <div id="spEvalBox" style="display: none; border-top: 1px solid var(--border-color); padding-top: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <span style="font-weight: 700;">نۇتۇق دەلىللىنىشى:</span>
+            <span id="spScoreBadge" style="padding: 4px 10px; border-radius: 6px; font-weight: bold; background: var(--accent-soft); color: var(--accent-sky);"></span>
+          </div>
+          <p id="spEvalFeedback" style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;"></p>
+          <div id="spWordBreakdown" class="word-breakdown"></div>
+          <div id="spMakharijTips"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Dialogues (36 sentences) -->
+    <div id="sp-dialogues" class="tab-pane">
+      <div class="section-card">
+        <div class="card-title">
+          <span>كۆزنەك مۇھىتىنى تاللاڭ (6 چوڭ كۆرۈنۈش):</span>
+        </div>
+        <select id="spScenarioSelect" class="icon-btn" style="width: 100%; padding: 8px; font-family: var(--font-uyghur); font-size: 13px;">
+          <option value="islamic_seminar">1. ئىسلام ئۇنىۋېرسىتېتى ۋە ئىلىم سۆھبىتى (6 جۈملە)</option>
+          <option value="airport_international">2. خەلقئارا ئايرودرومدا نۇتۇق مەشقى (6 جۈملە)</option>
+          <option value="book_fair">3. كىتاب كۆرگەزمىسى ۋە كۈتۈپخانا مەجلىسى (6 جۈملە)</option>
+          <option value="medical_clinic">4. شىپاخانا ۋە كېسەل كۆرۈش سۆھبىتى (6 جۈملە)</option>
+          <option value="market_trade">5. ئەنئەنىۋى بازار ۋە ھالال سودا-سېتىق (6 جۈملە)</option>
+          <option value="prophetic_eloquence">6. قۇرئان ۋە ھەدىس ئەدەبىيات نۇتقى (6 جۈملە)</option>
+        </select>
+      </div>
+
+      <div id="spDialogueList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+    </div>
+  </main>
+
+  <footer>
+    <span>شەرقىي تۈركىستان ئىلىم مەرىپىتى ئۈچۈن</span>
+    <span>نۆل تېلېمېتىرىيە · پۈتۈنلەي يەرلىك</span>
+  </footer>
+
+  <script src="rules_engine.js"></script>
+  <script src="scenarios.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

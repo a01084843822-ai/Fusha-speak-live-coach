@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Fusha-Speak Live Coach (ئەرەب تىلى نۇتۇق مەشقاۋۇلى)",
+  "version": "1.0.0",
+  "description": "فۇسھا ئەرەب تىلى يان كۆزنەك ئاۋازلىق مەشقاۋۇلى، ئاپتوماتىك ھەرىكەت قويۇش ۋە تەلەپپۇز تۈزىتىش قورالى.",
+  "permissions": [
+    "storage",
+    "sidePanel"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Fusha-Speak Live Coach"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+}

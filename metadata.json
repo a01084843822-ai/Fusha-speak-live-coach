@@ -1,0 +1,6 @@
+{
+  "name": "Fusha-Speak Live Coach (ئەرەب تىلى نۇتۇق ۋە مۇھىت مەشقاۋۇلى)",
+  "description": "تور كۆرگۈچ Side Panel ئاۋازلىق فۇسھا ئەرەب تىلى مەشقاۋۇلى، ئاپتوماتىك ھەرىكەت (Tashkeel) قويۇش ۋە تەلەپپۇز تۈزىتىش قورالى.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
